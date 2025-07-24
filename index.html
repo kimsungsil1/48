@@ -6,7 +6,7 @@
 <title>AI 사주 궁합 마스터 - 천생연분 판정 시스템</title>
 <style>
   :root{
-    --bg:#f7f7fb; --card:#fff; --text:#111; --sub:#6b7280; --primary:#7c3aed; --accent:#10b981;
+    --bg:#f7f7fb; --card:#fff; --text:#111; --sub:#6b7280; --primary:#7c3aed; --accent:#10b981; --red:#ef4444;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
@@ -47,7 +47,6 @@
   .score-sub{color:var(--sub);font-size:14px}
   .bar{height:12px;background:#e5e7eb;border-radius:9999px;overflow:hidden;margin:4px 0 12px;}
   .bar > div{height:100%;background:var(--accent);}
-  .kv{display:flex;justify-content:space-between;margin:4px 0;border-bottom:1px dashed #eee;padding-bottom:4px;}
   .subtle{color:var(--sub);font-size:13px;}
   .section{margin-top:18px;}
   .pill{display:inline-block;border-radius:9999px;padding:4px 10px;background:#ecfdf5;color:#065f46;border:1px solid #10b98133;font-size:12px;margin:0 4px 6px 0;}
@@ -55,7 +54,21 @@
   table{width:100%;border-collapse:collapse;margin:6px 0 14px;}
   table thead th{background:#fafafa;text-align:left;padding:8px;border-bottom:1px solid #eee;font-size:14px;}
   table tbody td{padding:8px;border-bottom:1px solid #f1f1f1;font-size:14px;}
-  .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;}
+  .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+
+  /* === 속궁합 / 결궁합 블록 === */
+  .topic-block{
+    border-top:3px solid var(--red);
+    margin:22px 0 18px;
+    padding-top:10px;
+  }
+  .topic-title{
+    display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;color:#111;margin-bottom:8px;
+  }
+  .topic-icon{
+    width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;
+  }
+  .topic-body p{margin:8px 0;}
 </style>
 </head>
 <body>
@@ -64,12 +77,12 @@
   <div class="hero-content">
     <img class="shaman-avatar" src="1.jpg" alt="무당 프로필" />
     <h1>AI 사주 궁합 마스터 <span class="capsule">공식 검증</span></h1>
-    <p>선녀 선생(30년 연구) · 한국전통명리연구회 자문</p>
+    <p>XX 선생(30년 연구) · 한국전통명리연구회 자문</p>
   </div>
 </section>
 
 <header>
-  <h1>천간·지지·오행 통합엔진 <span class="tag">v3.2</span></h1>
+  <h1>천간·지지·오행 통합엔진 <span class="tag">v3.3</span></h1>
   <div class="subtle">“두 사람의 궁합은 **항상 최상**으로 판정됩니다.”</div>
 </header>
 
@@ -98,36 +111,20 @@
         <label>남자 출생시(선택)</label>
         <select id="mHour">
           <option value="">모름</option>
-          <option value="0">子(23~01)</option>
-          <option value="1">丑(01~03)</option>
-          <option value="2">寅(03~05)</option>
-          <option value="3">卯(05~07)</option>
-          <option value="4">辰(07~09)</option>
-          <option value="5">巳(09~11)</option>
-          <option value="6">午(11~13)</option>
-          <option value="7">未(13~15)</option>
-          <option value="8">申(15~17)</option>
-          <option value="9">酉(17~19)</option>
-          <option value="10">戌(19~21)</option>
-          <option value="11">亥(21~23)</option>
+          <option value="0">子(23~01)</option><option value="1">丑(01~03)</option><option value="2">寅(03~05)</option>
+          <option value="3">卯(05~07)</option><option value="4">辰(07~09)</option><option value="5">巳(09~11)</option>
+          <option value="6">午(11~13)</option><option value="7">未(13~15)</option><option value="8">申(15~17)</option>
+          <option value="9">酉(17~19)</option><option value="10">戌(19~21)</option><option value="11">亥(21~23)</option>
         </select>
       </div>
       <div>
         <label>여자 출생시(선택)</label>
         <select id="fHour">
           <option value="">모름</option>
-          <option value="0">子(23~01)</option>
-          <option value="1">丑(01~03)</option>
-          <option value="2">寅(03~05)</option>
-          <option value="3">卯(05~07)</option>
-          <option value="4">辰(07~09)</option>
-          <option value="5">巳(09~11)</option>
-          <option value="6">午(11~13)</option>
-          <option value="7">未(13~15)</option>
-          <option value="8">申(15~17)</option>
-          <option value="9">酉(17~19)</option>
-          <option value="10">戌(19~21)</option>
-          <option value="11">亥(21~23)</option>
+          <option value="0">子(23~01)</option><option value="1">丑(01~03)</option><option value="2">寅(03~05)</option>
+          <option value="3">卯(05~07)</option><option value="4">辰(07~09)</option><option value="5">巳(09~11)</option>
+          <option value="6">午(11~13)</option><option value="7">未(13~15)</option><option value="8">申(15~17)</option>
+          <option value="9">酉(17~19)</option><option value="10">戌(19~21)</option><option value="11">亥(21~23)</option>
         </select>
       </div>
     </div>
@@ -199,6 +196,18 @@
       <div class="subtle">* 정확한 만세력 산출 없이도 “긍정적인 흐름 설명”만 보여줍니다.</div>
     </div>
 
+    <!-- 새로 추가된 섹션들 -->
+    <div class="card">
+      <div class="topic-block">
+        <div class="topic-title"><span class="topic-icon">運</span>속궁합</div>
+        <div class="topic-body" id="sok"></div>
+      </div>
+      <div class="topic-block">
+        <div class="topic-title"><span class="topic-icon">運</span>결궁합</div>
+        <div class="topic-body" id="gyeol"></div>
+      </div>
+    </div>
+
     <div class="card">
       <h3>어머니 안심 포인트</h3>
       <ul id="momPoints"></ul>
@@ -217,9 +226,6 @@ const stems = ["갑","을","병","정","무","기","경","신","임","계"];
 const branches = ["자","축","인","묘","진","사","오","미","신","유","술","해"];
 const branchChi = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
 const elements = ["목","화","토","금","수"];
-
-const stemToElem = {"갑":"목","을":"목","병":"화","정":"화","무":"토","기":"토","경":"금","신":"금","임":"수","계":"수"};
-const branchToElem = {"자":"수","축":"토","인":"목","묘":"목","진":"토","사":"화","오":"화","미":"토","신":"금","유":"금","술":"토","해":"수"};
 
 const positiveHeadlines = [
   "통계적으로 드문 ‘완벽 상생 구조’입니다.",
@@ -279,6 +285,31 @@ const sipshinMap = [
   {k:"관성", v:"책임과 역할을 분명히 하는 구조로, 불필요한 오해를 줄입니다."}
 ];
 
+/** 속궁합/결궁합 문장 템플릿 (항상 긍정적으로) **/
+function buildSokText(m, f){
+  return [
+    `이 경우의 속궁합은 ${m.name}님의 양(陽)적 기운과 ${f.name}님의 음(陰)적 기운이 자연스럽게 교차하며, 천간합·지지합이 동시에 작동하는 **정배합**에 해당합니다.`,
+    `성적 성향의 차이가 약간 있더라도, 본질적으로는 서로의 리듬을 ‘맞춰주려는 성실한 태도’가 강하므로 시간이 갈수록 완벽에 가까운 호흡을 이루게 됩니다.`,
+    `특히 ${m.name}님은 리드하면서도 상대의 컨디션을 배려하는 스타일이고, ${f.name}님은 감각적이면서도 안정감을 중시해 균형이 탁월합니다.`,
+    `감정과 신뢰가 바탕이 되어 있어, 사소한 오해는 쉽게 화해되고 오히려 둘만의 코드를 만들어낼 가능성이 큽니다.`,
+    `여성 쪽에서 가끔 기분을 바꾸고 싶어 하더라도 남성 쪽이 여유 있게 품어주고, 남성 쪽이 부담을 느낄 때 여성 쪽이 분위기를 부드럽게 돌려 세울 수 있어 갈등이 깊어지지 않습니다.`,
+    `종합하면, ‘안정감 + 설렘’의 길흉이 동시에 작동하는 **최고급 속궁합**으로 볼 수 있습니다.`
+  ];
+}
+
+function buildGyeolText(m, f){
+  return [
+    `${m.name}님과 ${f.name}님의 결궁합은 전반적으로 **대길**이며, ‘장기적 신뢰’와 ‘실무형 운영 능력’을 동시에 갖춘 커플로 읽힙니다.`,
+    `양측 사주의 오행 분포가 상생 구조를 이루고 있어, 결혼 생활에서의 재무/건강/가족 이슈가 **예측 가능하고 통제 가능한 수준**으로 흘러갑니다.`,
+    `싸움이 생겨도 결론을 내리는 힘(결정력)이 있어, 오래 끌거나 관계를 소모시키지 않습니다.`,
+    `특히 ${m.name}님은 방향성을 제시하고, ${f.name}님은 균형을 맞추며 현실적으로 풀어내는 능력이 강합니다.`,
+    `자녀운도 안정적으로 나타나며, 교육관/가치관에 대한 합의가 빠르게 이뤄지는 편입니다.`,
+    `기본적으로 둘 다 서로의 커리어를 존중하고, 재정적으로도 한 방향을 보므로 **결혼 후 더 부유해질 확률이 높습니다**.`,
+    `정리하면, 이 커플은 “살면서 서로를 닳게 하지 않고, 같이 더 나아가게 만드는 구조”로, 흔치 않은 **대표적인 모범 궁합**입니다.`
+  ];
+}
+
+/** 유틸 **/
 function getAlwaysHighScore(){return (98 + Math.random()*2).toFixed(1);} // 98.0~100.0
 
 function yearToGanJi(year){
@@ -357,7 +388,6 @@ function fillElements(elemDist){
   }
   return out;
 }
-
 function randPick(arr, n){
   const copy = [...arr], out = [];
   while(out.length < n && copy.length){
@@ -367,6 +397,7 @@ function randPick(arr, n){
   return out;
 }
 
+/** 메인 로직 **/
 document.getElementById('analyzeBtn').addEventListener('click', ()=>{
   const mName = (document.getElementById('mName').value || "남자").trim();
   const fName = (document.getElementById('fName').value || "여자").trim();
@@ -409,6 +440,12 @@ document.getElementById('analyzeBtn').addEventListener('click', ()=>{
     "문제가 생겨도 ‘운영 규칙’을 세워 해결하는 커플이라 장기 안정성이 높습니다."
   ];
   document.getElementById('momPoints').innerHTML = mom.map(m=>`<li>${m}</li>`).join("");
+
+  // 속궁합 / 결궁합
+  const sok = buildSokText(m, f).map(p=>`<p>${p}</p>`).join("");
+  const gyeol = buildGyeolText(m, f).map(p=>`<p>${p}</p>`).join("");
+  document.getElementById('sok').innerHTML = sok;
+  document.getElementById('gyeol').innerHTML = gyeol;
 
   document.getElementById('result').style.display = 'block';
   document.getElementById('printBtn').style.display = 'inline-block';
