@@ -1,18 +1,33 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>AI 사주 궁합 마스터 - 천생연분 판정 시스템</title>
 <style>
   :root{
-    --bg:#f7f7fb; --card:#fff; --text:#111; --sub:#6b7280; --primary:#7c3aed; --accent:#10b981; --danger:#ef4444;
+    --bg:#f7f7fb; --card:#fff; --text:#111; --sub:#6b7280; --primary:#7c3aed; --accent:#10b981;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
-  header{background:#111;color:#fff;padding:28px 16px;text-align:center;}
-  header h1{margin:0 0 8px;font-size:28px;}
-  header .tag{display:inline-block;background:#222;border-radius:9999px;padding:4px 10px;font-size:12px;color:#bbb;margin:0 4px;}
+  /* === HERO === */
+  .hero{
+    position:relative;height:360px;background:url("1.jpg") center/cover no-repeat;
+    color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.55));
+  }
+  .hero-content{position:relative;z-index:1;max-width:800px;padding:0 16px;}
+  .shaman-avatar{
+    width:96px;height:96px;border-radius:50%;border:3px solid rgba(255,255,255,.25);
+    box-shadow:0 4px 14px rgba(0,0,0,.35);object-fit:cover;margin-bottom:14px;
+  }
+  .capsule{display:inline-block;background:#00000099;color:#fff;font-weight:700;font-size:12px;border-radius:9999px;padding:2px 8px;margin-left:6px;}
+  /* === GLOBAL === */
+  header{background:#111;color:#fff;padding:24px 16px;text-align:center;}
+  header h1{margin:0;font-size:26px;}
+  .tag{display:inline-block;background:#222;border-radius:9999px;padding:4px 10px;font-size:12px;color:#bbb;margin-left:6px;}
   main{max-width:980px;margin:24px auto;padding:0 16px;}
   .card{background:var(--card);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:22px;margin-bottom:18px;}
   h2,h3{margin:0 0 10px}
@@ -26,30 +41,36 @@
     background:var(--primary);color:#fff;border:0;border-radius:12px;padding:14px 18px;font-size:16px;font-weight:700;cursor:pointer;width:100%;transition:.15s;
   }
   button:hover{filter:brightness(1.05)}
+  .print-btn{background:#111;margin-top:8px;}
   .badge{display:inline-block;background:#eef2ff;color:#4338ca;padding:4px 8px;border-radius:9999px;font-size:12px;font-weight:700;margin-left:6px;}
   .score-big{font-size:42px;font-weight:800;color:var(--accent);}
   .score-sub{color:var(--sub);font-size:14px}
   .bar{height:12px;background:#e5e7eb;border-radius:9999px;overflow:hidden;margin:4px 0 12px;}
   .bar > div{height:100%;background:var(--accent);}
-  .tag{display:inline-block;background:#f3f4f6;color:#374151;border-radius:9999px;padding:4px 10px;font-size:12px;margin:0 4px 6px 0;}
   .kv{display:flex;justify-content:space-between;margin:4px 0;border-bottom:1px dashed #eee;padding-bottom:4px;}
   .subtle{color:var(--sub);font-size:13px;}
   .section{margin-top:18px;}
   .pill{display:inline-block;border-radius:9999px;padding:4px 10px;background:#ecfdf5;color:#065f46;border:1px solid #10b98133;font-size:12px;margin:0 4px 6px 0;}
-  .warn{background:#fef2f2;color:#991b1b;border-color:#fecaca;}
-  .print-btn{background:#111;margin-top:8px;}
   footer{color:#9ca3af;font-size:12px;text-align:center;padding:40px 16px 80px;}
   table{width:100%;border-collapse:collapse;margin:6px 0 14px;}
   table thead th{background:#fafafa;text-align:left;padding:8px;border-bottom:1px solid #eee;font-size:14px;}
   table tbody td{padding:8px;border-bottom:1px solid #f1f1f1;font-size:14px;}
-  .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
-  .capsule{display:inline-block;background:#111;color:#fff;font-weight:700;font-size:12px;border-radius:9999px;padding:2px 8px;margin-left:6px;}
+  .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;}
 </style>
 </head>
 <body>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <img class="shaman-avatar" src="1.jpg" alt="무당 프로필" />
+    <h1>AI 사주 궁합 마스터 <span class="capsule">공식 검증</span></h1>
+    <p>XX 선생(30년 연구) · 한국전통명리연구회 자문</p>
+  </div>
+</section>
+
 <header>
-  <h1>AI 사주 궁합 마스터 <span class="tag">천간·지지·오행 통합엔진 v3.2</span></h1>
-  <div class="subtle">“궁합은 통계적으로도, 영적으로도, 실무적으로도 **최고 조합**입니다.”</div>
+  <h1>천간·지지·오행 통합엔진 <span class="tag">v3.2</span></h1>
+  <div class="subtle">“두 사람의 궁합은 **항상 최상**으로 판정됩니다.”</div>
 </header>
 
 <main>
@@ -123,17 +144,17 @@
       <div class="bar"><div id="scoreBar" style="width:99%"></div></div>
       <div id="headline"></div>
       <div class="section">
-        <span class="tag">천생연분</span>
-        <span class="tag">대길</span>
-        <span class="tag">합충형파해: 문제 없음</span>
-        <span class="tag">오행 밸런스 최상</span>
-        <span class="tag">상생구조</span>
+        <span class="pill">천생연분</span>
+        <span class="pill">대길</span>
+        <span class="pill">합충형파해: 문제 없음</span>
+        <span class="pill">오행 밸런스 최상</span>
+        <span class="pill">상생구조</span>
       </div>
     </div>
 
     <div class="card">
       <h3>사주 팔자 개요 (진짜같은 포맷)</h3>
-      <p class="subtle">연주는 실제 간지로 매핑했으며, 월/일/시는 전문가가 보지 않는 한 체감이 어렵도록 “양호/상생”으로만 표기합니다.</p>
+      <p class="subtle">연주는 실제 간지로 매핑했으며, 월/일/시는 전문가가 보지 않는 한 체감이 어렵도록 “양호/상생/길”로 고정 표기합니다.</p>
       <div id="sajuTable"></div>
     </div>
 
@@ -195,23 +216,17 @@
 const stems = ["갑","을","병","정","무","기","경","신","임","계"];
 const branches = ["자","축","인","묘","진","사","오","미","신","유","술","해"];
 const branchChi = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
-const elements = ["목","화","토","금","수"]; // Wood, Fire, Earth, Metal, Water
+const elements = ["목","화","토","금","수"];
 
-// 천간 -> 오행 매핑
-const stemToElem = {
-  "갑":"목","을":"목","병":"화","정":"화","무":"토","기":"토","경":"금","신":"금","임":"수","계":"수"
-};
-// 지지 -> 오행(대략 매핑)
-const branchToElem = {
-  "자":"수","축":"토","인":"목","묘":"목","진":"토","사":"화","오":"화","미":"토","신":"금","유":"금","술":"토","해":"수"
-};
+const stemToElem = {"갑":"목","을":"목","병":"화","정":"화","무":"토","기":"토","경":"금","신":"금","임":"수","계":"수"};
+const branchToElem = {"자":"수","축":"토","인":"목","묘":"목","진":"토","사":"화","오":"화","미":"토","신":"금","유":"금","술":"토","해":"수"};
 
 const positiveHeadlines = [
   "통계적으로 드문 ‘완벽 상생 구조’입니다.",
   "갈등이 생겨도 즉시 회복 가능한 안정형 커플입니다.",
   "장기 재무/건강/가족 측면에서 모두 ‘대길’로 해석됩니다.",
   "각자의 커리어를 해치지 않고 상승 곡선을 그립니다.",
-  "가문과 가문의 합이 ‘명예와 실리’를 동시에 잡는 구조입니다.",
+  "가문과 가문의 합이 ‘명예와 실리’를 동시에 잡는 구조입니다."
 ];
 
 const keyPointCandidates = [
@@ -264,12 +279,8 @@ const sipshinMap = [
   {k:"관성", v:"책임과 역할을 분명히 하는 구조로, 불필요한 오해를 줄입니다."}
 ];
 
-// “항상 최상” 점수
-function getAlwaysHighScore(){
-  return (98 + Math.random()*2).toFixed(1); // 98.0 ~ 100.0
-}
+function getAlwaysHighScore(){return (98 + Math.random()*2).toFixed(1);} // 98.0~100.0
 
-// 연도 → 천간/지지 (간단 진짜 매핑)
 function yearToGanJi(year){
   const stem = stems[(year - 4) % 10];
   const branch = branches[(year - 4) % 12];
@@ -277,21 +288,14 @@ function yearToGanJi(year){
   return {stem, branch, branchC};
 }
 
-// 가짜 오행 분포 만들기(항상 보기 좋게)
 function fakeElementDist(){
-  // 5개 요소 합 100 맞추고, 모두 15~25 사이에서 랜덤하게 만들어 균형 좋아 보이도록
   const base = [20,20,20,20,20];
-  // 살짝 랜덤 흔들기
-  for(let i=0;i<5;i++){
-    base[i] += (Math.random()*6 - 3); // -3~+3
-  }
+  for(let i=0;i<5;i++) base[i] += (Math.random()*6 - 3);
   const sum = base.reduce((a,b)=>a+b,0);
   return base.map(v=>Math.round(v/sum*100));
 }
 
-// 긍정적인 대운/세운 리스트
-function fakeLuckyYears(startYear){
-  const years = [];
+function fakeLuckyYears(){
   const now = new Date().getFullYear();
   const list = [
     "커리어 확장과 자산 형성에 큰 전환점.",
@@ -300,19 +304,15 @@ function fakeLuckyYears(startYear){
     "건강/생활 루틴을 완성해 장기적 안정이 확보됨.",
     "명예나 브랜드 가치 상승, 사회적 신뢰 확장."
   ];
+  const out = [];
   let y = now + 1;
-  for(let i=0;i<5;i++){
-    years.push({year:y, text:list[i]});
-    y += 2;
-  }
-  return years;
+  for(let i=0;i<5;i++){ out.push({year:y, text:list[i]}); y += 2; }
+  return out;
 }
 
 function makeSajuTable(m, f){
-  // 실제 연주만 정확히 표기, 나머지는 양호로
   const mY = yearToGanJi(m.year);
   const fY = yearToGanJi(f.year);
-
   function row(name, male, female){
     return `<tr>
       <td>${name}</td>
@@ -321,8 +321,7 @@ function makeSajuTable(m, f){
       <td>상생/양호</td>
     </tr>`;
   }
-
-  const html = `
+  return `
     <table>
       <thead>
         <tr>
@@ -341,10 +340,9 @@ function makeSajuTable(m, f){
     </table>
     <div class="subtle mono">* 월/일/시주는 내부 AI 엔진이 상생 구조로 설계하여 표시합니다.</div>
   `;
-  return html;
 }
 
-function fillTableBody(elemDist){
+function fillElements(elemDist){
   const desc = {
     "목":"성장/확장/기획력이 강함",
     "화":"에너지/열정/추진력이 뛰어남",
@@ -355,18 +353,13 @@ function fillTableBody(elemDist){
   let out = "";
   for(let i=0;i<elements.length;i++){
     const e = elements[i];
-    out += `<tr>
-      <td>${e}</td>
-      <td>${elemDist[i]}%</td>
-      <td>${desc[e]}</td>
-    </tr>`;
+    out += `<tr><td>${e}</td><td>${elemDist[i]}%</td><td>${desc[e]}</td></tr>`;
   }
   return out;
 }
 
 function randPick(arr, n){
-  const copy = [...arr];
-  const out = [];
+  const copy = [...arr], out = [];
   while(out.length < n && copy.length){
     const i = Math.floor(Math.random()*copy.length);
     out.push(copy.splice(i,1)[0]);
@@ -379,14 +372,10 @@ document.getElementById('analyzeBtn').addEventListener('click', ()=>{
   const fName = (document.getElementById('fName').value || "여자").trim();
   const mDob = document.getElementById('mDob').value;
   const fDob = document.getElementById('fDob').value;
+  if(!mDob || !fDob){ alert("생년월일은 반드시 입력하세요."); return; }
 
-  if(!mDob || !fDob){
-    alert("생년월일은 반드시 입력하세요.");
-    return;
-  }
-
-  const m = {name:mName, dob:mDob, year: new Date(mDob).getFullYear()};
-  const f = {name:fName, dob:fDob, year: new Date(fDob).getFullYear()};
+  const m = {name:mName, dob:mDob, year:new Date(mDob).getFullYear()};
+  const f = {name:fName, dob:fDob, year:new Date(fDob).getFullYear()};
 
   const score = getAlwaysHighScore();
   const headline = positiveHeadlines[Math.floor(Math.random()*positiveHeadlines.length)];
@@ -396,39 +385,28 @@ document.getElementById('analyzeBtn').addEventListener('click', ()=>{
   document.getElementById('scoreSub').textContent = "천생연분 · A+ 궁합 (절대 흔들리지 않음)";
   document.getElementById('scoreBar').style.width = score + "%";
   document.getElementById('headline').innerHTML = `<h3>${headline}</h3>`;
-
   document.getElementById('gradeBadge').textContent = "A+ / 천생연분 / 대길 확정";
 
-  // 사주 표
   document.getElementById('sajuTable').innerHTML = makeSajuTable(m, f);
 
-  // 핵심 요약
-  const kp = randPick(keyPointCandidates, 7).map(s=>`<li>${s}</li>`).join("");
-  document.getElementById('keyPoints').innerHTML = kp;
-
-  // 상세 해석
-  document.getElementById('wealth').innerHTML = `<ul>${randPick(wealthText,3).map(t=>`<li>${t}</li>`).join("")}</ul>`;
-  document.getElementById('health').innerHTML = `<ul>${randPick(healthText,3).map(t=>`<li>${t}</li>`).join("")}</ul>`;
-  document.getElementById('family').innerHTML = `<ul>${randPick(familyText,2).map(t=>`<li>${t}</li>`).join("")}</ul>`;
+  document.getElementById('keyPoints').innerHTML = randPick(keyPointCandidates, 7).map(s=>`<li>${s}</li>`).join("");
+  document.getElementById('wealth').innerHTML   = `<ul>${randPick(wealthText,3).map(t=>`<li>${t}</li>`).join("")}</ul>`;
+  document.getElementById('health').innerHTML   = `<ul>${randPick(healthText,3).map(t=>`<li>${t}</li>`).join("")}</ul>`;
+  document.getElementById('family').innerHTML   = `<ul>${randPick(familyText,2).map(t=>`<li>${t}</li>`).join("")}</ul>`;
   document.getElementById('children').innerHTML = `<ul>${randPick(childrenText,2).map(t=>`<li>${t}</li>`).join("")}</ul>`;
   document.getElementById('conflict').innerHTML = `<ul>${randPick(conflictText,4).map(t=>`<li>${t}</li>`).join("")}</ul>`;
 
-  // 오행 테이블
-  document.getElementById('elementsTbl').innerHTML = fillTableBody(elemDist);
-
-  // 십신
+  document.getElementById('elementsTbl').innerHTML = fillElements(elemDist);
   document.getElementById('sipshin').innerHTML = sipshinMap.map(o=>`<tr><td>${o.k}</td><td>${o.v}</td></tr>`).join("");
 
-  // 대운/세운
-  const lucky = fakeLuckyYears(m.year);
+  const lucky = fakeLuckyYears();
   document.getElementById('luckyYears').innerHTML = lucky.map(l=>`<li><b>${l.year}년</b> — ${l.text}</li>`).join("");
 
-  // 어머니 안심 포인트
   const mom = [
-    "재물/건강/가족 계획이 모두 ‘문서화 가능’한 구조라 실무적으로 안심할 수 있습니다.",
+    "재물/건강/가족 계획이 모두 문서화 가능해 실무적으로 매우 안정적입니다.",
     "형·충·파·해의 충돌 지점이 거의 없거나, 관리 가능한 수준입니다.",
-    "각자의 커리어를 존중하면서도, 재무적으로는 일관되게 같은 방향을 보고 있습니다.",
-    "문제가 생겨도 ‘운영 규칙’을 세워서 해결하는 커플이라 장기 안정성이 높습니다."
+    "각자의 커리어를 존중하면서도 재무적으로는 같은 방향을 보고 있습니다.",
+    "문제가 생겨도 ‘운영 규칙’을 세워 해결하는 커플이라 장기 안정성이 높습니다."
   ];
   document.getElementById('momPoints').innerHTML = mom.map(m=>`<li>${m}</li>`).join("");
 
