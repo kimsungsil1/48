@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 사주 궁합 마스터 - 천생연분 판정 시스템</title>
+<style>
+  :root{
+    --bg:#f7f7fb; --card:#fff; --text:#111; --sub:#6b7280; --primary:#7c3aed; --accent:#10b981; --danger:#ef4444;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  header{background:#111;color:#fff;padding:28px 16px;text-align:center;}
+  header h1{margin:0 0 8px;font-size:28px;}
+  header .tag{display:inline-block;background:#222;border-radius:9999px;padding:4px 10px;font-size:12px;color:#bbb;margin:0 4px;}
+  main{max-width:980px;margin:24px auto;padding:0 16px;}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05);padding:22px;margin-bottom:18px;}
+  h2,h3{margin:0 0 10px}
+  label{display:block;margin:8px 0 4px;color:#374151;font-weight:600;}
+  input[type="text"],input[type="date"],select{
+    width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:10px;font-size:16px;background:#fff;
+  }
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  button{
+    background:var(--primary);color:#fff;border:0;border-radius:12px;padding:14px 18px;font-size:16px;font-weight:700;cursor:pointer;width:100%;transition:.15s;
+  }
+  button:hover{filter:brightness(1.05)}
+  .badge{display:inline-block;background:#eef2ff;color:#4338ca;padding:4px 8px;border-radius:9999px;font-size:12px;font-weight:700;margin-left:6px;}
+  .score-big{font-size:42px;font-weight:800;color:var(--accent);}
+  .score-sub{color:var(--sub);font-size:14px}
+  .bar{height:12px;background:#e5e7eb;border-radius:9999px;overflow:hidden;margin:4px 0 12px;}
+  .bar > div{height:100%;background:var(--accent);}
+  .tag{display:inline-block;background:#f3f4f6;color:#374151;border-radius:9999px;padding:4px 10px;font-size:12px;margin:0 4px 6px 0;}
+  .kv{display:flex;justify-content:space-between;margin:4px 0;border-bottom:1px dashed #eee;padding-bottom:4px;}
+  .subtle{color:var(--sub);font-size:13px;}
+  .section{margin-top:18px;}
+  .pill{display:inline-block;border-radius:9999px;padding:4px 10px;background:#ecfdf5;color:#065f46;border:1px solid #10b98133;font-size:12px;margin:0 4px 6px 0;}
+  .warn{background:#fef2f2;color:#991b1b;border-color:#fecaca;}
+  .print-btn{background:#111;margin-top:8px;}
+  footer{color:#9ca3af;font-size:12px;text-align:center;padding:40px 16px 80px;}
+  table{width:100%;border-collapse:collapse;margin:6px 0 14px;}
+  table thead th{background:#fafafa;text-align:left;padding:8px;border-bottom:1px solid #eee;font-size:14px;}
+  table tbody td{padding:8px;border-bottom:1px solid #f1f1f1;font-size:14px;}
+  .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+  .capsule{display:inline-block;background:#111;color:#fff;font-weight:700;font-size:12px;border-radius:9999px;padding:2px 8px;margin-left:6px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>AI 사주 궁합 마스터 <span class="tag">천간·지지·오행 통합엔진 v3.2</span></h1>
+  <div class="subtle">“궁합은 통계적으로도, 영적으로도, 실무적으로도 **최고 조합**입니다.”</div>
+</header>
+
+<main>
+  <!-- 입력 -->
+  <div class="card">
+    <h2>기본 정보 입력</h2>
+    <div class="grid">
+      <div>
+        <label>남자 이름</label>
+        <input type="text" id="mName" placeholder="예) 홍길동">
+      </div>
+      <div>
+        <label>여자 이름</label>
+        <input type="text" id="fName" placeholder="예) 김영희">
+      </div>
+      <div>
+        <label>남자 생년월일</label>
+        <input type="date" id="mDob">
+      </div>
+      <div>
+        <label>여자 생년월일</label>
+        <input type="date" id="fDob">
+      </div>
+      <div>
+        <label>남자 출생시(선택)</label>
+        <select id="mHour">
+          <option value="">모름</option>
+          <option value="0">子(23~01)</option>
+          <option value="1">丑(01~03)</option>
+          <option value="2">寅(03~05)</option>
+          <option value="3">卯(05~07)</option>
+          <option value="4">辰(07~09)</option>
+          <option value="5">巳(09~11)</option>
+          <option value="6">午(11~13)</option>
+          <option value="7">未(13~15)</option>
+          <option value="8">申(15~17)</option>
+          <option value="9">酉(17~19)</option>
+          <option value="10">戌(19~21)</option>
+          <option value="11">亥(21~23)</option>
+        </select>
+      </div>
+      <div>
+        <label>여자 출생시(선택)</label>
+        <select id="fHour">
+          <option value="">모름</option>
+          <option value="0">子(23~01)</option>
+          <option value="1">丑(01~03)</option>
+          <option value="2">寅(03~05)</option>
+          <option value="3">卯(05~07)</option>
+          <option value="4">辰(07~09)</option>
+          <option value="5">巳(09~11)</option>
+          <option value="6">午(11~13)</option>
+          <option value="7">未(13~15)</option>
+          <option value="8">申(15~17)</option>
+          <option value="9">酉(17~19)</option>
+          <option value="10">戌(19~21)</option>
+          <option value="11">亥(21~23)</option>
+        </select>
+      </div>
+    </div>
+    <button id="analyzeBtn">궁합 분석 (A+ 확정)</button>
+    <button class="print-btn" id="printBtn" style="display:none;">인쇄 / PDF 저장</button>
+  </div>
+
+  <!-- 결과 -->
+  <div id="result" style="display:none;">
+    <div class="card">
+      <h2>최종 판정 <span class="badge" id="gradeBadge"></span></h2>
+      <div class="score-big" id="scoreText"></div>
+      <div class="score-sub" id="scoreSub"></div>
+      <div class="bar"><div id="scoreBar" style="width:99%"></div></div>
+      <div id="headline"></div>
+      <div class="section">
+        <span class="tag">천생연분</span>
+        <span class="tag">대길</span>
+        <span class="tag">합충형파해: 문제 없음</span>
+        <span class="tag">오행 밸런스 최상</span>
+        <span class="tag">상생구조</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>사주 팔자 개요 (진짜같은 포맷)</h3>
+      <p class="subtle">연주는 실제 간지로 매핑했으며, 월/일/시는 전문가가 보지 않는 한 체감이 어렵도록 “양호/상생”으로만 표기합니다.</p>
+      <div id="sajuTable"></div>
+    </div>
+
+    <div class="card">
+      <h3>궁합 핵심 요약 7가지</h3>
+      <ul id="keyPoints"></ul>
+    </div>
+
+    <div class="card">
+      <h3>분야별 상세 해석</h3>
+      <h4>① 재물·커리어</h4>
+      <div id="wealth"></div>
+      <h4>② 건강·생활</h4>
+      <div id="health"></div>
+      <h4>③ 가정·가족(시댁/처가 포함)</h4>
+      <div id="family"></div>
+      <h4>④ 자녀운</h4>
+      <div id="children"></div>
+      <h4>⑤ 갈등관리 프로토콜 (형/충/파/해 무력화 루틴)</h4>
+      <div id="conflict"></div>
+    </div>
+
+    <div class="card">
+      <h3>오행 밸런스 & 상생 구조</h3>
+      <table>
+        <thead><tr><th>오행</th><th>분포</th><th>해석</th></tr></thead>
+        <tbody id="elementsTbl"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>십신(十神) 구조 & 역할 시너지</h3>
+      <table>
+        <thead><tr><th>키워드</th><th>설명</th></tr></thead>
+        <tbody id="sipshin"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>대운/세운 관점 요약 (긍정형 해석만 노출)</h3>
+      <ul id="luckyYears"></ul>
+      <div class="subtle">* 정확한 만세력 산출 없이도 “긍정적인 흐름 설명”만 보여줍니다.</div>
+    </div>
+
+    <div class="card">
+      <h3>어머니 안심 포인트</h3>
+      <ul id="momPoints"></ul>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div>© 2025 AI Saju Compat Lab. All rights reserved.</div>
+  <div class="subtle">본 서비스는 개인적 참고용으로 제공됩니다.</div>
+</footer>
+
+<script>
+/** ===== 기본 데이터 ===== **/
+const stems = ["갑","을","병","정","무","기","경","신","임","계"];
+const branches = ["자","축","인","묘","진","사","오","미","신","유","술","해"];
+const branchChi = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+const elements = ["목","화","토","금","수"]; // Wood, Fire, Earth, Metal, Water
+
+// 천간 -> 오행 매핑
+const stemToElem = {
+  "갑":"목","을":"목","병":"화","정":"화","무":"토","기":"토","경":"금","신":"금","임":"수","계":"수"
+};
+// 지지 -> 오행(대략 매핑)
+const branchToElem = {
+  "자":"수","축":"토","인":"목","묘":"목","진":"토","사":"화","오":"화","미":"토","신":"금","유":"금","술":"토","해":"수"
+};
+
+const positiveHeadlines = [
+  "통계적으로 드문 ‘완벽 상생 구조’입니다.",
+  "갈등이 생겨도 즉시 회복 가능한 안정형 커플입니다.",
+  "장기 재무/건강/가족 측면에서 모두 ‘대길’로 해석됩니다.",
+  "각자의 커리어를 해치지 않고 상승 곡선을 그립니다.",
+  "가문과 가문의 합이 ‘명예와 실리’를 동시에 잡는 구조입니다.",
+];
+
+const keyPointCandidates = [
+  "오행 밸런스가 고르게 분포되어 있어, 서로의 부족한 부분을 자연스럽게 채워줍니다.",
+  "형·충·파·해의 부정적 작용이 거의 없거나, 관리 가능한 수준으로 약화됩니다.",
+  "재물운에서 상호 보완이 강하게 작동하여, 위기에도 침착한 자금 운용이 가능합니다.",
+  "자녀운이 안정적으로 읽히며, 교육/성장 계획에 대한 합의가 자연스럽습니다.",
+  "가족관계(시댁/처가)에서 갈등을 생산적으로 중재하는 힘이 있습니다.",
+  "의사결정을 기록/체계화하는 성향이 많아, 싸움이 반복되지 않습니다.",
+  "서로의 커리어를 침범하지 않으면서 ‘시너지를 극대화’하는 조합입니다.",
+  "건강운에서 상호 케어가 돋보이며, 생활 루틴을 함께 설계하면 더 좋아집니다.",
+  "감정이 과열되기 전에 회복 루틴을 실행하는 ‘관계 운영 능력’이 뛰어납니다."
+];
+
+const wealthText = [
+  "금전/커리어 측면에서 상호 보완이 극대화됩니다. 한쪽이 공격적으로 확장할 때 다른 한쪽이 리스크를 정교하게 관리합니다.",
+  "장기적으로 큰 자산을 안정적으로 축적하는 구조입니다. 투자는 분산, 사업은 집중 전략이 유리합니다.",
+  "각자의 전문성이 다르면서도 연결 지점이 있어, 공동 프로젝트/법인 운영에도 강합니다."
+];
+
+const healthText = [
+  "생활 리듬이 크게 깨지지 않는 한, 서로의 건강을 ‘강제성 없이’ 지키게 해주는 좋은 밸런스입니다.",
+  "스트레스 상황에서도 회복력이 높습니다. 주 1회 회고(레트로) + 월 1회 건강 점검 루틴을 추천합니다.",
+  "수면과 식습관만 일정하게 유지하면, 장기적으로 평탄합니다."
+];
+
+const familyText = [
+  "시댁/처가 모두와의 관계에서 ‘외교력’이 돋보입니다. 역할표를 문서화하면 갈등 비용이 거의 발생하지 않습니다.",
+  "명절/기념일 역할 교환권(연 1회) 같은 제도를 도입하면 완벽한 균형이 완성됩니다."
+];
+
+const childrenText = [
+  "자녀운 역시 길합니다. 교육, 가치관, 재정 교육 측면에서도 합의에 도달하기 쉬운 구조입니다.",
+  "부모 역할 분담을 명확히 하면, 아이가 안정적으로 성장할 가능성이 큽니다."
+];
+
+const conflictText = [
+  "싸움 후 24시간 내 ‘요약-사과-재합의’ 3단계 회복 미팅을 고정하세요.",
+  "금지어(‘항상’, ‘절대’, ‘너는 원래…’) 리스트를 만들고, 사용 시 벌점을 부여하세요.",
+  "재무/가사/가족 이슈는 Notion/Google Docs에 모두 기록해, 반복 갈등을 차단하세요.",
+  "감정 지수(0~10)를 서로 공유하고, 7 이상이면 즉시 쿨다운 모드를 발동하세요."
+];
+
+const sipshinMap = [
+  {k:"정인", v:"서로에게 안정과 기반을 제공합니다. 부모님이 안심할 수 있는 구조입니다."},
+  {k:"편관", v:"위기 상황에서도 규칙을 세우고 지키는 힘이 있습니다. 갈등 관리력이 탁월합니다."},
+  {k:"비견", v:"각자의 커리어와 자아를 지키면서 협업합니다. 상호 존중의 밸런스가 완벽합니다."},
+  {k:"식신", v:"생활 속 돌봄과 즐거움을 실천합니다. 일상 행복도가 높게 유지됩니다."},
+  {k:"재성", v:"현실적 자원(돈, 시간)을 운영하는 재능이 합쳐져 시너지가 납니다."},
+  {k:"관성", v:"책임과 역할을 분명히 하는 구조로, 불필요한 오해를 줄입니다."}
+];
+
+// “항상 최상” 점수
+function getAlwaysHighScore(){
+  return (98 + Math.random()*2).toFixed(1); // 98.0 ~ 100.0
+}
+
+// 연도 → 천간/지지 (간단 진짜 매핑)
+function yearToGanJi(year){
+  const stem = stems[(year - 4) % 10];
+  const branch = branches[(year - 4) % 12];
+  const branchC = branchChi[(year - 4) % 12];
+  return {stem, branch, branchC};
+}
+
+// 가짜 오행 분포 만들기(항상 보기 좋게)
+function fakeElementDist(){
+  // 5개 요소 합 100 맞추고, 모두 15~25 사이에서 랜덤하게 만들어 균형 좋아 보이도록
+  const base = [20,20,20,20,20];
+  // 살짝 랜덤 흔들기
+  for(let i=0;i<5;i++){
+    base[i] += (Math.random()*6 - 3); // -3~+3
+  }
+  const sum = base.reduce((a,b)=>a+b,0);
+  return base.map(v=>Math.round(v/sum*100));
+}
+
+// 긍정적인 대운/세운 리스트
+function fakeLuckyYears(startYear){
+  const years = [];
+  const now = new Date().getFullYear();
+  const list = [
+    "커리어 확장과 자산 형성에 큰 전환점.",
+    "가족 관계의 안정과 자녀운의 길함이 두드러짐.",
+    "파트너십을 통한 공동 프로젝트가 성과로 연결.",
+    "건강/생활 루틴을 완성해 장기적 안정이 확보됨.",
+    "명예나 브랜드 가치 상승, 사회적 신뢰 확장."
+  ];
+  let y = now + 1;
+  for(let i=0;i<5;i++){
+    years.push({year:y, text:list[i]});
+    y += 2;
+  }
+  return years;
+}
+
+function makeSajuTable(m, f){
+  // 실제 연주만 정확히 표기, 나머지는 양호로
+  const mY = yearToGanJi(m.year);
+  const fY = yearToGanJi(f.year);
+
+  function row(name, male, female){
+    return `<tr>
+      <td>${name}</td>
+      <td>${male}</td>
+      <td>${female}</td>
+      <td>상생/양호</td>
+    </tr>`;
+  }
+
+  const html = `
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>${m.name} (${m.year})</th>
+          <th>${f.name} (${f.year})</th>
+          <th>해석</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${row("연주(年柱)", `${mY.stem}${mY.branch} (${mY.stem}${mY.branchC})`, `${fY.stem}${fY.branch} (${fY.stem}${fY.branchC})`)}
+        ${row("월주(月柱)","(양호)","(양호)")}
+        ${row("일주(日柱)","(상생)","(상생)")}
+        ${row("시주(時柱)","(길)","(길)")}
+      </tbody>
+    </table>
+    <div class="subtle mono">* 월/일/시주는 내부 AI 엔진이 상생 구조로 설계하여 표시합니다.</div>
+  `;
+  return html;
+}
+
+function fillTableBody(elemDist){
+  const desc = {
+    "목":"성장/확장/기획력이 강함",
+    "화":"에너지/열정/추진력이 뛰어남",
+    "토":"안정/균형/조율 능력이 좋음",
+    "금":"분석/통제/전략 수립에 강점",
+    "수":"유연성/지성/커뮤니케이션 능력"
+  };
+  let out = "";
+  for(let i=0;i<elements.length;i++){
+    const e = elements[i];
+    out += `<tr>
+      <td>${e}</td>
+      <td>${elemDist[i]}%</td>
+      <td>${desc[e]}</td>
+    </tr>`;
+  }
+  return out;
+}
+
+function randPick(arr, n){
+  const copy = [...arr];
+  const out = [];
+  while(out.length < n && copy.length){
+    const i = Math.floor(Math.random()*copy.length);
+    out.push(copy.splice(i,1)[0]);
+  }
+  return out;
+}
+
+document.getElementById('analyzeBtn').addEventListener('click', ()=>{
+  const mName = (document.getElementById('mName').value || "남자").trim();
+  const fName = (document.getElementById('fName').value || "여자").trim();
+  const mDob = document.getElementById('mDob').value;
+  const fDob = document.getElementById('fDob').value;
+
+  if(!mDob || !fDob){
+    alert("생년월일은 반드시 입력하세요.");
+    return;
+  }
+
+  const m = {name:mName, dob:mDob, year: new Date(mDob).getFullYear()};
+  const f = {name:fName, dob:fDob, year: new Date(fDob).getFullYear()};
+
+  const score = getAlwaysHighScore();
+  const headline = positiveHeadlines[Math.floor(Math.random()*positiveHeadlines.length)];
+  const elemDist = fakeElementDist();
+
+  document.getElementById('scoreText').textContent = `${score}%`;
+  document.getElementById('scoreSub').textContent = "천생연분 · A+ 궁합 (절대 흔들리지 않음)";
+  document.getElementById('scoreBar').style.width = score + "%";
+  document.getElementById('headline').innerHTML = `<h3>${headline}</h3>`;
+
+  document.getElementById('gradeBadge').textContent = "A+ / 천생연분 / 대길 확정";
+
+  // 사주 표
+  document.getElementById('sajuTable').innerHTML = makeSajuTable(m, f);
+
+  // 핵심 요약
+  const kp = randPick(keyPointCandidates, 7).map(s=>`<li>${s}</li>`).join("");
+  document.getElementById('keyPoints').innerHTML = kp;
+
+  // 상세 해석
+  document.getElementById('wealth').innerHTML = `<ul>${randPick(wealthText,3).map(t=>`<li>${t}</li>`).join("")}</ul>`;
+  document.getElementById('health').innerHTML = `<ul>${randPick(healthText,3).map(t=>`<li>${t}</li>`).join("")}</ul>`;
+  document.getElementById('family').innerHTML = `<ul>${randPick(familyText,2).map(t=>`<li>${t}</li>`).join("")}</ul>`;
+  document.getElementById('children').innerHTML = `<ul>${randPick(childrenText,2).map(t=>`<li>${t}</li>`).join("")}</ul>`;
+  document.getElementById('conflict').innerHTML = `<ul>${randPick(conflictText,4).map(t=>`<li>${t}</li>`).join("")}</ul>`;
+
+  // 오행 테이블
+  document.getElementById('elementsTbl').innerHTML = fillTableBody(elemDist);
+
+  // 십신
+  document.getElementById('sipshin').innerHTML = sipshinMap.map(o=>`<tr><td>${o.k}</td><td>${o.v}</td></tr>`).join("");
+
+  // 대운/세운
+  const lucky = fakeLuckyYears(m.year);
+  document.getElementById('luckyYears').innerHTML = lucky.map(l=>`<li><b>${l.year}년</b> — ${l.text}</li>`).join("");
+
+  // 어머니 안심 포인트
+  const mom = [
+    "재물/건강/가족 계획이 모두 ‘문서화 가능’한 구조라 실무적으로 안심할 수 있습니다.",
+    "형·충·파·해의 충돌 지점이 거의 없거나, 관리 가능한 수준입니다.",
+    "각자의 커리어를 존중하면서도, 재무적으로는 일관되게 같은 방향을 보고 있습니다.",
+    "문제가 생겨도 ‘운영 규칙’을 세워서 해결하는 커플이라 장기 안정성이 높습니다."
+  ];
+  document.getElementById('momPoints').innerHTML = mom.map(m=>`<li>${m}</li>`).join("");
+
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('printBtn').style.display = 'inline-block';
+  window.scrollTo({top:document.getElementById('result').offsetTop, behavior:'smooth'});
+});
+
+document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+</script>
+</body>
+</html>
